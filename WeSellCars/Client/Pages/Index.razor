@@ -1,57 +1,66 @@
 ﻿@page "/"
+@inject IMenuService MenuService
+@inject IOrderService OrderService
 
-<PageTitle>Index</PageTitle>
+@if (State.Menu.Cars.Any())
+{
+        <PageTitle>Index</PageTitle>
 
-<!--Car Menu-->
+    <!--Car Menu-->
 
-<CarList 
-    Title="Our Selection of cars" 
-    Items="@State.Menu.Cars" 
-    ButtonTitle="Order" 
-    ButtonClass="btn btn-success" 
-    Selected="@AddToCart">
-</CarList>
+    <CarList 
+        Title="Our Selection of cars" 
+        Items="@State.Menu.Cars" 
+        ButtonTitle="Order" 
+        ButtonClass="btn btn-success" 
+        Selected="@AddToCart">
+    </CarList>
 
-<!--Car menu end-->
+    <!--Car menu end-->
 
-<!--Shopping Cart-->
+    <!--Shopping Cart-->
 
-<Cart 
-    Orders="@State.Buy.Orders" 
-    GetCarFromId="@State.Menu.GetCar" 
-    Selected="@RemoveFromCart" 
-    />
+    <Cart 
+        Orders="@State.Buy.Orders" 
+        GetCarFromId="@State.Menu.GetCar" 
+        Selected="@RemoveFromCart" 
+        />
 
-<!--End Shopping cart-->
+    <!--End Shopping cart-->
 
-<!--Customer entry-->
+    <!--Customer entry-->
 
-<CustomerEntry 
-    Title="Please enter your details below" 
-    @bind-Customer="@State.Buy.Customer" 
-    ButtonTitle="Checkout" 
-    ButtonClass="mx-auto w-25 btn btn-success" 
-    ValidSubmit="PlaceOrder">
-</CustomerEntry>
+    <CustomerEntry 
+        Title="Please enter your details below" 
+        @bind-Customer="@State.Buy.Customer" 
+        ButtonTitle="Checkout" 
+        ButtonClass="mx-auto w-25 btn btn-success" 
+        ValidSubmit="PlaceOrder">
+    </CustomerEntry>
 
-<!--End Customer entry-->
-@State.ToJson()
+        <!--End Customer entry-->
+    @State.ToJson()
+}
+else
+{
+    <div class="mx-auto text-center mb-3 mt-3">
+        <div class="spinner-border text-danger" role="status">
+        <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
 
 @code{
     private State State { get; } = new State();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        State.Menu.AddCar(
-            new Car(1, "BMW", "M3", 1300000, CarType.SportsCar));
-        State.Menu.AddCar(
-            new Car(2, "VW", "Tiguan", 700000, CarType.SUV));
-        State.Menu.AddCar(
-            new Car(3, "Toyota", "Corolla", 350000, CarType.Seadan));
-        State.Menu.AddCar(
-            new Car(4, "Toyota", "Quantum", 500000, CarType.Taxi));
-        State.Menu.AddCar(
-            new Car(5, "Ford", "Ranger", 600000, CarType.MiniVan));
+        Menu menu = await MenuService.GetMenu();
+
+        foreach(Car car in menu.Cars)
+        {
+            State.Menu.AddCar(car);
+        }
     }
 
     private void AddToCart(Car car)
@@ -64,8 +73,8 @@
         State.Buy.RemoveAt(pos);
     }
 
-    private void PlaceOrder()
+    private async Task PlaceOrder()
     {
-        Console.WriteLine("Placing order");
+        await OrderService.PlaceOrder(State.Buy);
     }
 }
