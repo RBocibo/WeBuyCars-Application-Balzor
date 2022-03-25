@@ -1,0 +1,36 @@
+﻿@*<ItemList Items="@Items">
+    <Header>
+        <h1>@Title</h1>
+    </Header>
+    @foreach (var car in Items)
+   {
+    <RowTemplate Context="car">
+        <CarItem 
+            Car="@car" 
+            ButtonClass="@ButtonClass" 
+            ButtonTitle="@ButtonTitle" 
+            Selected="@Selected" >
+        </CarItem>
+    </RowTemplate>
+   }*@
+
+@if (Items is null || !Items.Any())
+{
+    <div>Loading...</div>
+}
+else
+{
+    <h1>@Title</h1>
+
+    @foreach (var car in Items)
+   {
+       <CarItem Car="@car" ButtonClass="@ButtonClass" ButtonTitle="@ButtonTitle" Selected="@Selected">
+           
+       </CarItem>
+   }
+}
+
+
+@code {
+
+}

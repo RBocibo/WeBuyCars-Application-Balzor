@@ -1,0 +1,29 @@
+﻿
+<h3>CarItem</h3>
+
+<div class="row">
+        <div class="col">
+            @Car.Name
+        </div>
+        <div class="col">
+            @Car.Model
+        </div>
+        <div class="col">
+            <img src="@CarTypeImage(Car.CarType)" alt="@Car.CarType" />
+        </div>
+        <div class="col text-right">
+            @Car.Price
+        </div>
+        <div class="col">
+            <button class="@ButtonClass" @onclick="@(() => Selected.InvokeAsync(Car))">
+                Add To Cart
+            </button>
+        </div>
+    </div>
+
+@code {
+    private string CarTypeImage(CarType carType)
+    {
+        return $"images/{carType.ToString().ToLower()}.jpg";
+    }
+}

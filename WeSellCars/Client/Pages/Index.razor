@@ -1,0 +1,71 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<!--Car Menu-->
+
+<CarList 
+    Title="Our Selection of cars" 
+    Items="@State.Menu.Cars" 
+    ButtonTitle="Order" 
+    ButtonClass="btn btn-success" 
+    Selected="@AddToCart">
+</CarList>
+
+<!--Car menu end-->
+
+<!--Shopping Cart-->
+
+<Cart 
+    Orders="@State.Buy.Orders" 
+    GetCarFromId="@State.Menu.GetCar" 
+    Selected="@RemoveFromCart" 
+    />
+
+<!--End Shopping cart-->
+
+<!--Customer entry-->
+
+<CustomerEntry 
+    Title="Please enter your details below" 
+    @bind-Customer="@State.Buy.Customer" 
+    ButtonTitle="Checkout" 
+    ButtonClass="mx-auto w-25 btn btn-success" 
+    ValidSubmit="PlaceOrder">
+</CustomerEntry>
+
+<!--End Customer entry-->
+@State.ToJson()
+
+@code{
+    private State State { get; } = new State();
+
+    protected override void OnInitialized()
+    {
+        State.Menu.AddCar(
+            new Car(1, "BMW", "M3", 1300000, CarType.SportsCar));
+        State.Menu.AddCar(
+            new Car(2, "VW", "Tiguan", 700000, CarType.SUV));
+        State.Menu.AddCar(
+            new Car(3, "Toyota", "Corolla", 350000, CarType.Seadan));
+        State.Menu.AddCar(
+            new Car(4, "Toyota", "Quantum", 500000, CarType.Taxi));
+        State.Menu.AddCar(
+            new Car(5, "Ford", "Ranger", 600000, CarType.MiniVan));
+    }
+
+    private void AddToCart(Car car)
+    {
+        State.Buy.Add(car.CarId);
+    }
+
+    private void RemoveFromCart(int pos)
+    {
+        State.Buy.RemoveAt(pos);
+    }
+
+    private void PlaceOrder()
+    {
+        Console.WriteLine("Placing order");
+    }
+}

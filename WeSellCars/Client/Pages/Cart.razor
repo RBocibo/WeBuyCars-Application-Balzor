@@ -1,0 +1,84 @@
+﻿@*
+@if(Cars.Any())
+{
+    <ItemList Items="@Cars">
+        <header>
+        <h1 class="">Your current order</h1>
+        </header>
+
+        <RowTemplate Content="tuple">
+            <CarItem Car="@tuple.car"
+                ButtonClass="btn btn-danger" 
+                ButtonTitle="Remove" 
+                Selected="@(() => Selected.InvokeAsync(tuple.pos))"
+
+            </CarItem>
+
+        </RowTemplate>
+        <Footer>
+            <div class="row">
+        <div class="col"></div>
+        <div class="col"><hr /></div>
+        <div class="col"> </div>
+        <div class="col"> </div>
+    </div>
+
+    <div class="row">
+        <div class="col"> Total:</div>
+        <div class="col text-right font-weight-bold"> @($"{TotalPrice:0.00}") </div>
+        <div class="col"> </div>
+        <div class="col"> </div>
+        <div class="col"> </div>
+    </div>
+        </Footer>
+    </ItemList>
+    
+}*@
+@if (Orders is not null && Orders.Any())
+{
+    <h1 class="">Your current order</h1>
+
+    @foreach (var (car, pos) in Cars)
+    {
+        <div class="row mb-2">
+            <div class="col">
+                @car.Name
+            </div>
+            <div class="col text-right">
+                @($"{car.Price:0.00}")
+            </div>
+            <div class="col"></div>
+            <br><br>
+            <div class="col"></div>
+            <div class="col">
+                <button class="btn btn-danger" @onclick="@(() => Selected.InvokeAsync(pos))">
+                    Remove
+                </button>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col"></div>
+        <div class="col"><hr /></div>
+        <div class="col"> </div>
+        <div class="col"> </div>
+    </div>
+
+    <div class="row">
+        <div class="col"> Total:</div>
+        <div class="col text-right font-weight-bold"> @($"{TotalPrice:0.00}") </div>
+        <div class="col"> </div>
+        <div class="col"> </div>
+        <div class="col"> </div>
+    </div>
+}
+
+@code {
+    private State State { get; } = new State();
+
+    private void RemoveFromCart(int pos) 
+    {
+        State.Buy.RemoveAt(pos);
+    }
+}

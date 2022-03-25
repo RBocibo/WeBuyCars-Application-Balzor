@@ -1,0 +1,70 @@
+﻿
+<h3>CustomerEntry</h3>
+<h1>Please enter your details below</h1>
+<h1 class="mt-2 mb-2">@Title</h1>
+
+<EditForm Model="@Customer" OnValidSubmit="ValidSubmit">
+
+    <DataAnnotationsValidator/>
+    <InputWatcher FieldChanged="@FieldChanged" @ref="@inputWatcher"/>
+
+    <fieldset>
+        <div class="row mb-2">
+            <label class="col-2" for="name">Name:</label>
+            <InputText class="col-6" id="name" @bind-Value="Customer.CustomerName"/>
+        </div>
+        <div class="row mb-2">
+            <div class="col-6 offset-2">
+                <ValidationMessage For="@(() => Customer.CustomerName)" />
+            </div>
+        </div>
+            <div class="row mb-2">
+            <label class="col-2" for="street">Street:</label>
+            <InputText class="col-6" id="street" @bind-Value="Customer.Street"/>
+        </div>
+        <div class="row mb-2">
+            <div class="col-6 offset-2">
+                <ValidationMessage For="@(() => Customer.Street)" />
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-2" for="city">City:</label>
+            <InputText class="col-6" id="city" @bind-Value="Customer.City"/>
+        </div>
+        <div class="row mb-2">
+            <div class="col-6 offset-2">
+                <ValidationMessage For="@(() => Customer.City)" />
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-2" for="province">Province</label>
+            <InputText class="col-6" id="province" @bind-Value="Customer.Province"/>
+        </div>
+        <div class="row mb-2">
+            <div class="col-6 offset-2">
+                <ValidationMessage For="@(() => Customer.Province)" />
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-2" for="email">Email:</label>
+            <InputText class="col-6" id="email" @bind-Value="Customer.CustomerEmail"/>
+        </div>
+        <div class="row mb-2">
+            <div class="col-6 offset-2">
+                <ValidationMessage For="@(() => Customer.CustomerEmail)" />
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <button class="@ButtonClass" disabled="@isInvalid">
+                @ButtonTitle
+            </button>
+        </div>
+
+    </fieldset>
+</EditForm>
+
+
+@code {
+
+}
