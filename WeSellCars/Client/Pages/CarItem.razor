@@ -1,29 +1,44 @@
-﻿
-<h3>CarItem</h3>
-
-<div class="row">
-        <div class="col">
-            @Car.Name
-        </div>
-        <div class="col">
-            @Car.Model
-        </div>
-        <div class="col">
-            <img src="@CarTypeImage(Car.CarType)" alt="@Car.CarType" />
-        </div>
-        <div class="col text-right">
-            @Car.Price
-        </div>
-        <div class="col">
-            <button class="@ButtonClass" @onclick="@(() => Selected.InvokeAsync(Car))">
-                Add To Cart
-            </button>
-        </div>
-    </div>
+﻿<div class="row">
+  <div class="col">
+    @if (ShowCarInformation is object)
+    {
+      <a href=""
+         @onclick="@(() => ShowCarInformation?.Invoke(Car))">
+        @Car.Name
+      </a>
+    }
+    else
+    {
+      @Car.Name
+    }
+  </div>
+  <div class="col">
+    @Car.Price
+  </div>
+  <div class="col">
+    <img src="@CarTypeImage(Car.CarType)"
+         alt="@Car.CarType" />
+  </div>
+  <div class="col">
+    <button class="@ButtonClass"
+            @onclick="@(async () => await Selected.InvokeAsync(Car))">
+      @ButtonTitle
+    </button>
+  </div>
+</div>
 
 @code {
-    private string CarTypeImage(CarType carType)
-    {
-        return $"images/{carType.ToString().ToLower()}.jpg";
-    }
+    [Parameter]
+        public Car? Car { get; set; } 
+        [Parameter]
+        public string? ButtonTitle { get; set; } 
+        [Parameter]
+        public string? ButtonClass { get; set; }
+        [Parameter]
+        public EventCallback<Car> Selected { get; set; }
+        private string CarTypeImage(CarType carType)
+        => $"images/{carType.ToString().ToLower()}.jpg";
+
+        [Parameter]
+        public Action<Car> ShowCarInformation { get; set; }
 }

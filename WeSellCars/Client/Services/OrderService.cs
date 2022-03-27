@@ -10,9 +10,10 @@ namespace WeSellCars.Client.Services
         {
             this.httpClient = httpClient;
         }
-        public async ValueTask PlaceOrder(BuyNow cart)
+        public async Task PlaceOrder(BuyNow cart)
         {
             await httpClient.PostAsJsonAsync("/orders", cart);
         }
+
     }
 }

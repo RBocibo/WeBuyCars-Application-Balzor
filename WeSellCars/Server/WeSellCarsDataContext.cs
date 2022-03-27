@@ -21,25 +21,25 @@ namespace WeSellCars.Server
 
             var carEntity = modelBuilder.Entity<Car>();
 
-            //Car entity
-            carEntity.HasKey(c => c.CarId);
-            carEntity.Property(c => c.Name).HasMaxLength(50);
-            carEntity.Property(c => c.Model).HasMaxLength(50);
-            carEntity.Property(c => c.Price).HasColumnType("money");
-            carEntity.Property(c => c.CarType).HasConversion<string>();
-
-            var ordersEntity = modelBuilder.Entity<Order>();
-            ordersEntity.HasKey(order => order.Id);
-            ordersEntity.HasOne(order => order.Customer);
-            ordersEntity.HasMany(order => order.Cars).WithMany(c => c.Orders);
+            carEntity.HasKey(car => car.CarId);
+            carEntity.Property(car => car.Price)
+              .HasColumnType("money");
 
             var customerEntity = modelBuilder.Entity<Customer>();
             customerEntity.HasKey(customer => customer.CustomerId);
-            customerEntity.Property(customer => customer.CustomerName).HasMaxLength(100);
-            customerEntity.Property(customer => customer.CustomerEmail).HasMaxLength(100);
-            customerEntity.Property(customer => customer.Street).HasMaxLength(50);
-            customerEntity.Property(customer => customer.City).HasMaxLength(50);
-            customerEntity.Property(cus => cus.Province).HasMaxLength(50);
+            customerEntity.HasOne(customer => customer.Order)
+                          .WithOne(order => order.Customer)
+                          .HasForeignKey<Order>(
+                             order => order.CustomerId);
+
+            var orderEntity = modelBuilder.Entity<Order>();
+            orderEntity.HasKey(order => order.Id);
+            orderEntity.HasMany(order => order.CarOrders)
+                       .WithOne(carOrder => carOrder.Order);
+
+            modelBuilder.Entity<CarOrder>()
+              .HasOne(co => co.Car)
+              .WithMany();
         }
     }
 }

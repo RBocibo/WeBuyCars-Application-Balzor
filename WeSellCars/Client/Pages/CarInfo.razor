@@ -1,0 +1,26 @@
+﻿@page "/CarInfo"
+
+<h2>Car @State.CurrentCar.Name Details</h2>
+
+<div class="row">
+  <div class="col">
+    @State.CurrentCar.Name
+  </div>
+  <div class="col">
+    @State.CurrentCar.Price
+  </div>
+  <div class="col">
+    <img src="@CarTypeImage(State.CurrentCar.CarType)"
+         alt="@State.CurrentCar.CarType" />
+  </div>
+  <div class="col">
+    <a class="btn btn-primary" href="/">Menu</a>
+  </div>
+</div>
+
+@inject State State
+
+@code {
+  private string CarTypeImage(CarType carType)
+    => $"images/{carType.ToString().ToLower()}.jpg";
+}

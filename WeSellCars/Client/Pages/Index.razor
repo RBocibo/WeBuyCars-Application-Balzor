@@ -1,80 +1,70 @@
 ﻿@page "/"
-@inject IMenuService MenuService
-@inject IOrderService OrderService
+<!-- Car Menu -->
 
-@if (State.Menu.Cars.Any())
-{
-        <PageTitle>Index</PageTitle>
+<CarList Title="Our selection of cars"
+           Menu="@State.Menu"
+           Selected="@( async (car)
+             => AddToBasket(car))"
+           ShowCarInformation="ShowCarInformation" />
 
-    <!--Car Menu-->
+<!-- End Car menu -->
+<!-- Shopping Cart -->
 
-    <CarList 
-        Title="Our Selection of cars" 
-        Items="@State.Menu.Cars" 
-        ButtonTitle="Order" 
-        ButtonClass="btn btn-success" 
-        Selected="@AddToCart">
-    </CarList>
+<Cart Title="Your current order"
+                BuyNow="@State.Buy"
+                GetCarFromId="@State.Menu.GetCar"
+                Selected="@( (pos) => RemoveFromCart(pos))" />
 
-    <!--Car menu end-->
+<!-- End shopping Cart -->
+<!-- Customer entry -->
 
-    <!--Shopping Cart-->
+<CustomerEntry Title="Please enter your details below"
+               ButtonTitle="Checkout"
+               ButtonClass="btn btn-primary"
+               @bind-Customer="@State.Buy.Customer"
+               Submit="@PlaceOrder" />
 
-    <Cart 
-        Orders="@State.Buy.Orders" 
-        GetCarFromId="@State.Menu.GetCar" 
-        Selected="@RemoveFromCart" 
-        />
+<!-- End customer entry -->
 
-    <!--End Shopping cart-->
+<p>@State.ToJson()</p>
 
-    <!--Customer entry-->
+@inject IMenuService menuService
+@inject IOrderService orderService
+@inject State State
+@inject NavigationManager uriHelper
 
-    <CustomerEntry 
-        Title="Please enter your details below" 
-        @bind-Customer="@State.Buy.Customer" 
-        ButtonTitle="Checkout" 
-        ButtonClass="mx-auto w-25 btn btn-success" 
-        ValidSubmit="PlaceOrder">
-    </CustomerEntry>
+@code {
 
-        <!--End Customer entry-->
-    @State.ToJson()
-}
-else
-{
-    <div class="mx-auto text-center mb-3 mt-3">
-        <div class="spinner-border text-danger" role="status">
-        <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-}
+  // private State State { get; } = new State();
 
-@code{
-    private State State { get; } = new State();
+  protected override async Task OnInitializedAsync()
+  {
+    State.Menu = await menuService.GetMenu();
+  }
 
-    protected override async Task OnInitializedAsync()
-    {
-        Menu menu = await MenuService.GetMenu();
+  private void AddToBasket(Car car)
+  {
+    Console.WriteLine($"Added car {car.Name}");
+    State.Buy.Add(car.CarId);
+  }
 
-        foreach(Car car in menu.Cars)
-        {
-            State.Menu.AddCar(car);
-        }
-    }
+  private void RemoveFromCart(int pos)
+  {
+    Console.WriteLine($"Removing car at pos {pos}");
+    State.Buy.RemoveAt(pos);
+  }
 
-    private void AddToCart(Car car)
-    {
-        State.Buy.Add(car.CarId);
-    }
+  private async Task PlaceOrder()
+  {
+    await orderService.PlaceOrder(State.Buy);
+  }
 
-    private void RemoveFromCart(int pos)
-    {
-        State.Buy.RemoveAt(pos);
-    }
+  private void ShowCarInformation(Car selected)
+  {
+    //Console.WriteLine($"Selected: {selected.Name} - {this.State != null} -  {this.uriHelper != null}");
+    this.State.CurrentCar = selected;
 
-    private async Task PlaceOrder()
-    {
-        await OrderService.PlaceOrder(State.Buy);
-    }
+    Task.Run(() =>  this.uriHelper.NavigateTo("/carinfo"));
+  }
+
 }

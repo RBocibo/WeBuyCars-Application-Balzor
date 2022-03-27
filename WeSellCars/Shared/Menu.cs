@@ -13,9 +13,9 @@ namespace WeSellCars.Shared
         {
             Cars.Add(car);
         }
-        public Car? GetCar(int id)
+        public Car GetCar(int id)
         {
-            return Cars.FirstOrDefault(c => c.CarId == id);
+            return Cars.SingleOrDefault(c => c.CarId == id);
         }
     }
 }

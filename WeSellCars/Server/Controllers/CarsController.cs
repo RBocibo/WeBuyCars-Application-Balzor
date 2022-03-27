@@ -1,31 +1,27 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WeSellCars.Shared;
+using System.Linq;
 
 namespace WeSellCars.Server.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class CarsController : ControllerBase
     {
-        private readonly WeSellCarsDataContext _context;
+        
+        private readonly WeSellCarsDataContext db;
 
-        public CarsController(WeSellCarsDataContext context)
-        {
-            _context = context;
-        }
+        public CarsController(WeSellCarsDataContext db)
+          => this.db = db;
 
-        [HttpGet("/cars")]
+        [HttpGet("cars")]
         public IQueryable<Car> GetCars()
-        {
-            return _context.Cars;
-        }
+          => this.db.Cars; 
 
-        [HttpPost]
+        [HttpPost("cars")]
         public IActionResult InsertCar([FromBody] Car car)
         {
-            _context.Add(car);
-            _context.SaveChanges();
+            db.Cars.Add(car);
+            db.SaveChanges();
             return Created($"cars/{car.CarId}", car);
         }
     }

@@ -24,6 +24,6 @@ namespace WeSellCars.Shared
         [Required(ErrorMessage = "Please provide province")]
         public string Province { get; set; } = default!;
 
-
+        public Order Order { get; set; }
     }
 }

@@ -1,36 +1,42 @@
-﻿@*<ItemList Items="@Items">
-    <Header>
-        <h1>@Title</h1>
-    </Header>
-    @foreach (var car in Items)
-   {
-    <RowTemplate Context="car">
-        <CarItem 
-            Car="@car" 
-            ButtonClass="@ButtonClass" 
-            ButtonTitle="@ButtonTitle" 
-            Selected="@Selected" >
-        </CarItem>
-    </RowTemplate>
-   }*@
+﻿<h1>@Title</h1>
 
-@if (Items is null || !Items.Any())
+@if (Menu == null || Menu.Cars == null || Menu.Cars.Count == 0)
 {
-    <div>Loading...</div>
+  <div style="height:20vh;" class="pt-3">
+    <div class="mx-left pt-3" style="width:200px">
+      <div class="progress">
+        <div class="progress-bar bg-danger
+                    progress-bar-striped
+                    progress-bar-animated w-100"
+             role="progressbar"
+             aria-valuenow="100" aria-valuemin="0"
+             aria-valuemax="100"></div>
+      </div>
+    </div>
+  </div>
 }
 else
 {
-    <h1>@Title</h1>
-
-    @foreach (var car in Items)
-   {
-       <CarItem Car="@car" ButtonClass="@ButtonClass" ButtonTitle="@ButtonTitle" Selected="@Selected">
-           
-       </CarItem>
-   }
+  @foreach (var car in Menu.Cars)
+  {
+    <CarItem Car="@car"
+               ButtonClass="btn btn-success"
+               ButtonTitle="Order"
+               Selected="@Selected"
+               ShowCarInformation="@ShowCarInformation"/>
+  }
 }
 
-
 @code {
+    [Parameter]
+        public string Title { get; set; }
 
+        [Parameter]
+        public Menu Menu { get; set; }
+
+        [Parameter]
+        public EventCallback<Car> Selected { get; set; }
+
+        [Parameter]
+        public Action<Car> ShowCarInformation { get; set; }
 }

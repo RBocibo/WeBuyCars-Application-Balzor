@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace WeSellCars.Shared
 {
-    public enum CarType
+    public class CarOrder
     {
-        SportsCar,
-        SUV,
-        Seadan,
-        Taxi,
-        MiniVan
+        public int Id { get; set; }
+        public Order Order { get; set; }
+        public Car Car { get; set; }
     }
 }

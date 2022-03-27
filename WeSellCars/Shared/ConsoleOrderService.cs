@@ -8,10 +8,10 @@ namespace WeSellCars.Shared
 {
     public class ConsoleOrderService : IOrderService
     {
-        public ValueTask PlaceOrder(BuyNow cart)
+        public async Task PlaceOrder(BuyNow cart)
         {
             Console.WriteLine($"Placing a car order for {cart.Customer.CustomerName}");
-            return new ValueTask();
+            await Task.CompletedTask;
         }
     }
 }

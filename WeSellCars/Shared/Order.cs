@@ -9,7 +9,9 @@ namespace WeSellCars.Shared
     public class Order
     {
         public int Id { get; set; }
-        public Customer Customer { get; set; } = default!;
-        public ICollection<Car> Cars { get; set; } = default!;
+        public Customer Customer { get; set; } 
+        public int CustomerId { get; set; }
+        public List<CarOrder> CarOrders { get; set;}
+        public decimal TotalPrice { get; set; }
     }
 }

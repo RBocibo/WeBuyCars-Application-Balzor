@@ -16,17 +16,24 @@ namespace WeSellCars.Server.Controllers
         [HttpPost("/orders")]
         public IActionResult InsertOrder([FromBody] BuyNow cart)
         {
-            Order order = new Order();
-            order.Customer = cart.Customer;
-            order.Cars = new List<Car>();
+            Customer customer = cart.Customer;
+            var order = new Order()
+            {
+                CarOrders = new List<CarOrder>()
+            };
+            customer.Order = order;
+
             foreach (int carId in cart.Orders)
             {
-                var car = _context.Cars.Single(p => p.CarId == carId);
-                order.Cars.Add(car);
+                Car car = _context.Cars.Single(o => o.CarId == carId);
+                order.CarOrders.Add(new CarOrder { Car = car, Order = order});
             }
-            _context.Orders.Add(order);
+
+            order.TotalPrice = order.CarOrders.Sum(co => co.Car.Price);
+
+            _context.Customers.Add(customer);
             _context.SaveChanges();
-            return Created("/orders", order.Id);
+            return Ok();
         }
     }
 }

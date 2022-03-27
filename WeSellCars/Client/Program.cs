@@ -1,19 +1,25 @@
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using WeSellCars.Client;
+using Microsoft.Extensions.DependencyInjection;
 using WeSellCars.Client.Services;
 using WeSellCars.Shared;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-var builder = WebAssemblyHostBuilder.CreateDefault(args);
-builder.RootComponents.Add<App>("#app");
-builder.RootComponents.Add<HeadOutlet>("head::after");
+namespace WeSellCars.Client
+{
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.RootComponents.Add<App>("#app");
+            builder.Services.AddTransient<IMenuService, MenuService>();
+            builder.Services.AddTransient<IOrderService, OrderService>();
+            builder.Services.AddSingleton<State>();
 
-builder.Services.AddScoped(sp => new HttpClient 
-{ 
-    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) 
-});
-
-builder.Services.AddTransient<IMenuService, MenuService>();
-builder.Services.AddTransient<IOrderService, OrderService>();
-
-await builder.Build().RunAsync();
+            builder.Services.AddSingleton(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            await builder.Build().RunAsync();
+        }
+    }
+}

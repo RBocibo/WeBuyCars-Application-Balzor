@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "4b916558-2d87-42fe-831e-bdb6858afaca": {
+      "ProjectGuid": "4b916558-2d87-42fe-831e-bdb6858afaca",
+      "DisplayName": "WeSellCars.Server",
+      "ColorIndex": 0
+    },
+    "dd7e1a07-f4b8-4c02-91ee-97dc2cc8a8bd": {
+      "ProjectGuid": "dd7e1a07-f4b8-4c02-91ee-97dc2cc8a8bd",
+      "DisplayName": "WeSellCars.Client",
+      "ColorIndex": 1
+    },
+    "1978f79d-49ab-4c5f-b8cc-e97b457935da": {
+      "ProjectGuid": "1978f79d-49ab-4c5f-b8cc-e97b457935da",
+      "DisplayName": "WeSellCars.Shared",
+      "ColorIndex": 2
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 3
+}

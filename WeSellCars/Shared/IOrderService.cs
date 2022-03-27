@@ -8,6 +8,6 @@ namespace WeSellCars.Shared
 {
     public interface IOrderService
     {
-        ValueTask PlaceOrder(BuyNow cart);
+        Task PlaceOrder(BuyNow cart);
     }
 }
